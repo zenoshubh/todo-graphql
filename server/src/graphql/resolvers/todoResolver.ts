@@ -1,4 +1,4 @@
-import TodoModel from "../../models/todo.model";
+import TodoService from "../../services/todo";
 import type { Context } from "../../types";
 
 const queries = {
@@ -11,20 +11,7 @@ const queries = {
             };
         }
 
-        try {
-            const todos = await TodoModel.find({ userId: context.user.id }).sort({ createdAt: -1 });
-            return {
-                success: true,
-                message: "Todos fetched successfully",
-                todos
-            };
-        } catch (error) {
-            return {
-                success: false,
-                message: "Error fetching todos",
-                todos: []
-            };
-        }
+        return await TodoService.getUserTodos(context.user.id);
     },
 
     getTodo: async (_: any, { id }: { id: string }, context: Context) => {
@@ -36,28 +23,7 @@ const queries = {
             };
         }
 
-        try {
-            const todo = await TodoModel.findOne({ _id: id, userId: context.user.id });
-            if (!todo) {
-                return {
-                    success: false,
-                    message: "Todo not found",
-                    todo: null
-                };
-            }
-
-            return {
-                success: true,
-                message: "Todo fetched successfully",
-                todo
-            };
-        } catch (error) {
-            return {
-                success: false,
-                message: "Error fetching todo",
-                todo: null
-            };
-        }
+        return await TodoService.getTodoById({ id, userId: context.user.id });
     }
 }
 
@@ -71,25 +37,11 @@ const mutations = {
             };
         }
 
-        try {
-            const todo = await TodoModel.create({
-                title: input.title,
-                description: input.description,
-                userId: context.user.id
-            });
-
-            return {
-                success: true,
-                message: "Todo created successfully",
-                todo
-            };
-        } catch (error: any) {
-            return {
-                success: false,
-                message: error.message || "Error creating todo",
-                todo: null
-            };
-        }
+        return await TodoService.createTodo({
+            title: input.title,
+            description: input.description,
+            userId: context.user.id
+        });
     },
 
     updateTodo: async (_: any, { input }: { input: { id: string; title?: string; description?: string; completed?: boolean } }, context: Context) => {
@@ -101,33 +53,10 @@ const mutations = {
             };
         }
 
-        try {
-            const todo = await TodoModel.findOneAndUpdate(
-                { _id: input.id, userId: context.user.id },
-                { ...input },
-                { new: true, runValidators: true }
-            );
-
-            if (!todo) {
-                return {
-                    success: false,
-                    message: "Todo not found",
-                    todo: null
-                };
-            }
-
-            return {
-                success: true,
-                message: "Todo updated successfully",
-                todo
-            };
-        } catch (error: any) {
-            return {
-                success: false,
-                message: error.message || "Error updating todo",
-                todo: null
-            };
-        }
+        return await TodoService.updateTodo({
+            ...input,
+            userId: context.user.id
+        });
     },
 
     deleteTodo: async (_: any, { id }: { id: string }, context: Context) => {
@@ -139,29 +68,7 @@ const mutations = {
             };
         }
 
-        try {
-            const todo = await TodoModel.findOneAndDelete({ _id: id, userId: context.user.id });
-
-            if (!todo) {
-                return {
-                    success: false,
-                    message: "Todo not found",
-                    todo: null
-                };
-            }
-
-            return {
-                success: true,
-                message: "Todo deleted successfully",
-                todo
-            };
-        } catch (error: any) {
-            return {
-                success: false,
-                message: "Error deleting todo",
-                todo: null
-            };
-        }
+        return await TodoService.deleteTodo({ id, userId: context.user.id });
     },
 
     toggleTodo: async (_: any, { id }: { id: string }, context: Context) => {
@@ -173,32 +80,7 @@ const mutations = {
             };
         }
 
-        try {
-            const todo = await TodoModel.findOne({ _id: id, userId: context.user.id });
-
-            if (!todo) {
-                return {
-                    success: false,
-                    message: "Todo not found",
-                    todo: null
-                };
-            }
-
-            todo.completed = !todo.completed;
-            await todo.save();
-
-            return {
-                success: true,
-                message: "Todo status updated successfully",
-                todo
-            };
-        } catch (error: any) {
-            return {
-                success: false,
-                message: "Error toggling todo",
-                todo: null
-            };
-        }
+        return await TodoService.toggleTodo({ id, userId: context.user.id });
     }
 }
 
