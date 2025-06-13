@@ -5,6 +5,7 @@ import type { TodosResponse } from '../../types';
 import TodoItem from './TodoItem';
 import AddTodo from './AddTodo';
 import { Button } from '../ui/button';
+import { ClipboardList } from 'lucide-react';
 
 const TodoList: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
@@ -104,7 +105,9 @@ const TodoList: React.FC = () => {
 
       {todos.length === 0 && (
         <div className="text-center py-12 text-muted-foreground bg-card rounded-lg border border-border shadow-md">
-          <div className="text-6xl mb-4">📝</div>
+          <div className="flex justify-center mb-4">
+            <ClipboardList className="h-16 w-16 text-primary opacity-80" />
+          </div>
           <h3 className="text-xl font-medium text-card-foreground mb-2">No todos yet</h3>
           <p>Add your first todo using the form above to get started!</p>
         </div>
