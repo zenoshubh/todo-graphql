@@ -1,5 +1,3 @@
-import AuthDialog from "./components/Auth/AuthDialog";
-import RegisterForm from "./components/Auth/RegisterForm";
 import Footer from "./components/Layout/Footer";
 import Navbar from "./components/Layout/Navbar";
 import TodoList from "./components/Todo/TodoList";
