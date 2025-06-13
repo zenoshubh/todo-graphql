@@ -39,7 +39,6 @@ export const REGISTER = gql`
         id
         name
         email
-        createdAt
       }
     }
   }
@@ -55,7 +54,6 @@ export const LOGIN = gql`
         id
         name
         email
-        createdAt
       }
     }
   }
