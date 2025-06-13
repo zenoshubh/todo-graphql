@@ -118,6 +118,38 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Input text and caret color */
+  input, textarea, select {
+    color: var(--card-foreground);
+    caret-color: var(--primary);
+  }
+  
+  /* Prevent browser autofill styling */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--background) inset !important;
+    -webkit-text-fill-color: var(--card-foreground) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  
+  /* For Firefox and other browsers */
+  input:autofill,
+  input:autofill:hover,
+  input:autofill:focus,
+  input:autofill:active {
+    box-shadow: 0 0 0 30px var(--background) inset !important;
+    -webkit-text-fill-color: var(--card-foreground) !important;
+    filter: none;
+  }
+  
+  /* Make sure placeholder text matches our color scheme */
+  ::placeholder {
+    color: var(--muted-foreground);
+    opacity: 0.7;
+  }
 }
 
 body {
