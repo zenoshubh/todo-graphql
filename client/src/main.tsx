@@ -11,8 +11,11 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { AuthProvider } from "./context/AuthContext.tsx";
 
+// Use environment variable for API URI
+const API_URI = import.meta.env.VITE_API_URI || "http://localhost:8000";
+
 const httpLink = createHttpLink({
-  uri: "http://localhost:8000",
+  uri: API_URI,
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -34,7 +37,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ApolloProvider client={client}>
       <AuthProvider>
-      <App />
+        <App />
       </AuthProvider>
     </ApolloProvider>
   </StrictMode>
