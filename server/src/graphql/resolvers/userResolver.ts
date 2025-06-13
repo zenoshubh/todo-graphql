@@ -1,9 +1,25 @@
-import UserModel from "../../../models/user.model";
+import UserModel from "../../models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import type { Context } from "../../types";
 
-export const mutations = {
-    register: async (_: any, { input }: { input: { name: string; email: string; password: string } }) => {
+const queries = {
+ me: async (_: any, __: any, context: Context) => {
+      if (!context.user) {
+        throw new Error('Authentication required');
+      }
+
+      const user = await UserModel.findById(context.user.id);
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      return user;
+    },
+}
+
+const mutations = {
+register: async (_: any, { input }: { input: { name: string; email: string; password: string } }) => {
       const { name, email, password } = input;
 
       try {
@@ -110,6 +126,6 @@ export const mutations = {
         };
       }
     },
-
-    
 }
+
+export const userResolver = {queries, mutations};

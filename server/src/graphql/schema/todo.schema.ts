@@ -1,4 +1,4 @@
-export const typeDefs = `#graphql
+export const todoSchema = `#graphql
 
 # Todo type definition
   type Todo {
